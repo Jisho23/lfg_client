@@ -1,20 +1,52 @@
 import React, { Component } from "react";
-import { Card, Image, Popup } from "semantic-ui-react";
+import { Card, Image, Popup, Button } from "semantic-ui-react";
 
-const Gamelist = props => {
-  const games = props.games.map(game => {
+class Gamelist extends Component {
+  constructor() {
+    super();
+    this.handleClick = this.handleClick.bind(this);
+  }
+
+  getGames() {
+    const games = this.props.games.map(game => {
+      return (
+        <Card raised>
+          <Image src={game.image} />
+          <Card.Header>{game.name}</Card.Header>
+          {this.props.appState.user.games.includes(game.id) ? (
+            <Button color="purple" onClick={this.handleClick} value={game.id}>
+              > Remove Game From Collection
+            </Button>
+          ) : (
+            <Button color="violet" onClick={this.handleClick} value={game.id}>
+              Add Game to Collection
+            </Button>
+          )}
+        </Card>
+      );
+    });
+    return games;
+  }
+
+  handleClick(e, id) {
+    let performAction = "";
+    if (id.children === "Add Game to Collection") {
+      performAction = "add";
+    } else {
+      performAction = "remove";
+    }
+    this.props.addRemoveGame(performAction, id.value);
+  }
+
+  render() {
     return (
-      <Card raised>
-        <Image src={game.image} />
-        <Card.Header>{game.name}</Card.Header>
-      </Card>
+      <div>
+        {this.props.appState.authorization.isLoggedIn ? (
+          <Card.Group itemsPerRow={4}>{this.getGames()}</Card.Group>
+        ) : null}
+      </div>
     );
-  });
-  return (
-    <div>
-      <Card.Group itemsPerRow={4}>{games}</Card.Group>
-    </div>
-  );
-};
+  }
+}
 
 export default Gamelist;

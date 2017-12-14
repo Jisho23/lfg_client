@@ -6,8 +6,12 @@ class Navbar extends Component {
   state = {};
 
   handleItemClick = (e, { name }) => {
-    this.setState({ activeItem: name });
-    this.props.history.push(`/${name}`);
+    if (name === "logout") {
+      this.props.handleLogout();
+    } else {
+      this.setState({ activeItem: name });
+      this.props.history.push(`/${name}`);
+    }
   };
 
   render() {
@@ -23,13 +27,33 @@ class Navbar extends Component {
           />
         </Menu.Item>
         <br />
-        <Menu.Item
-          name="login"
-          onClick={this.handleItemClick}
-          active={activeItem === "login"}
-        >
-          Login
-        </Menu.Item>
+        {this.props.isLoggedIn ? (
+          <Menu.Item
+            name="myprofile"
+            onClick={this.handleItemClick}
+            active={activeItem === "myprofile"}
+          >
+            MyProfile
+          </Menu.Item>
+        ) : (
+          <Menu.Item
+            name="login"
+            onClick={this.handleItemClick}
+            active={activeItem === "login"}
+          >
+            Login
+          </Menu.Item>
+        )}
+        {this.props.isLoggedIn ? (
+          <Menu.Item
+            name="logout"
+            onClick={this.handleItemClick.bind(this)}
+            active={activeItem === "login"}
+          >
+            LogOut
+          </Menu.Item>
+        ) : null}
+
         <Menu.Item
           name="games"
           onClick={this.handleItemClick}
