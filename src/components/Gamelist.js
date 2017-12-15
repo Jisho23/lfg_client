@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Card, Image, Popup, Button } from "semantic-ui-react";
+import { Card, Image, Popup, Button, Segment } from "semantic-ui-react";
 
 class Gamelist extends Component {
   constructor() {
@@ -11,11 +11,13 @@ class Gamelist extends Component {
     const games = this.props.games.map(game => {
       return (
         <Card raised>
-          <Image src={game.image} />
-          <Card.Header>{game.name}</Card.Header>
+          <Image src={game.image} />{" "}
+          <Segment textAlign="center">
+            <Card.Header>{game.name}</Card.Header>
+          </Segment>
           {this.props.appState.user.games.includes(game.id) ? (
             <Button color="purple" onClick={this.handleClick} value={game.id}>
-              > Remove Game From Collection
+              Remove Game From Collection
             </Button>
           ) : (
             <Button color="violet" onClick={this.handleClick} value={game.id}>

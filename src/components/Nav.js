@@ -17,7 +17,7 @@ class Navbar extends Component {
   render() {
     const { activeItem } = this.state;
     return (
-      <Menu inverted color={"black"}>
+      <Menu pointing inverted color={"black"}>
         <Menu.Item name="header">
           <Header
             as="hs"
@@ -46,14 +46,13 @@ class Navbar extends Component {
         )}
         {this.props.isLoggedIn ? (
           <Menu.Item
-            name="logout"
-            onClick={this.handleItemClick.bind(this)}
-            active={activeItem === "login"}
+            name="creategroup"
+            onClick={this.handleItemClick}
+            active={activeItem === "creategroup"}
           >
-            LogOut
+            CreateGroup
           </Menu.Item>
         ) : null}
-
         <Menu.Item
           name="games"
           onClick={this.handleItemClick}
@@ -61,6 +60,15 @@ class Navbar extends Component {
         >
           Browse games
         </Menu.Item>
+        {this.props.isLoggedIn ? (
+          <Menu.Item
+            name="logout"
+            onClick={this.handleItemClick.bind(this)}
+            active={activeItem === "login"}
+          >
+            LogOut
+          </Menu.Item>
+        ) : null}
       </Menu>
     );
   }

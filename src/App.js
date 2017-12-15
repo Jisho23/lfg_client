@@ -4,6 +4,7 @@ import Navbar from "./components/Nav.js";
 import Gamelist from "./components/Gamelist.js";
 import Login from "./components/Login.js";
 import Myprofile from "./components/Myprofile.js";
+import CreateGroup from "./components/Creategroup.js";
 import {} from "semantic-ui-react";
 import logo from "./logo.svg";
 import "./App.css";
@@ -144,7 +145,6 @@ class App extends Component {
         ) : null}
         <Route exact path="/" render={() => <div>Test</div>} />
         <Route
-          exact
           path="/games"
           render={() => (
             <div>
@@ -157,14 +157,12 @@ class App extends Component {
           )}
         />
         <Route
-          exact
           path="/login"
           render={() => (
             <Login handleOnSubmit={this.login} appState={this.state} />
           )}
         />
         <Route
-          exact
           path="/myprofile"
           render={() => (
             <Myprofile
@@ -172,6 +170,11 @@ class App extends Component {
               updateUser={this.updateUser.bind(this)}
             />
           )}
+        />
+        <Route
+          exact
+          path="/creategroup"
+          render={() => <CreateGroup games={this.state.games} />}
         />
       </div>
     );
