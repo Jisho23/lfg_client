@@ -5,6 +5,7 @@ import Gamelist from "./components/Gamelist.js";
 import Login from "./components/Login.js";
 import Myprofile from "./components/Myprofile.js";
 import CreateGroup from "./components/Creategroup.js";
+import Groupview from "./components/Groupview.js";
 import {} from "semantic-ui-react";
 import logo from "./logo.svg";
 import "./App.css";
@@ -19,7 +20,8 @@ class App extends Component {
         isloggedIn: false
       },
       error: "",
-      user: {}
+      user: {},
+      group: {}
     };
 
     this.handleLogout = this.handleLogout.bind(this);
@@ -63,6 +65,7 @@ class App extends Component {
           });
           localStorage.setItem("jwt", json.jwt);
           this.findCurrentUser();
+          this.props.history.push("/myprofile");
         } else {
           this.setState({ error: json.error });
         }
@@ -80,7 +83,6 @@ class App extends Component {
       .then(res => res.json())
       .then(json => {
         this.setState({ authorization: { isLoggedIn: true }, user: json });
-        this.props.history.push("/myprofile");
       });
   };
 
@@ -133,6 +135,47 @@ class App extends Component {
     this.props.history.push(`/login`);
   }
 
+  handleCreateGroup(form) {
+    fetch(`http://localhost:3001/api/v1/groups`, {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+        accept: "application/json",
+        Authorization: localStorage.getItem("jwt")
+      },
+      body: JSON.stringify(form)
+    })
+      .then(res => res.json())
+      .then(json => this.setState({ group: json }))
+      .then(() => this.findCurrentUser())
+      .then(() => this.props.history.push("/group"));
+  }
+
+  handleFindGroup(groupId) {
+    fetch(`http://localhost:3001/api/v1/groups/${groupId}`)
+      .then(res => res.json())
+      .then(json => this.setState({ group: json }))
+      .then(() => this.props.history.push("/group"));
+  }
+
+  handleAcceptRejectInvite(action, invite_id) {
+    const body = { toDo: action, inviteId: invite_id };
+    debugger;
+    fetch(`http://localhost:3001/api/v1/invites/{invite_id}`, {
+      method: "PATCH",
+      headers: new Headers({
+        Accept: "application/json",
+        "Content-Type": "application/json"
+      }),
+      body: JSON.stringify(body)
+    })
+      .then(res => res.json())
+      .then(json => {
+        console.log(json);
+        this.findCurrentUser();
+      });
+  }
+
   render() {
     return (
       <div>
@@ -168,13 +211,27 @@ class App extends Component {
             <Myprofile
               user={this.state.user}
               updateUser={this.updateUser.bind(this)}
+              handleFindGroup={this.handleFindGroup.bind(this)}
+              handleAcceptRejectInvite={this.handleAcceptRejectInvite.bind(
+                this
+              )}
             />
           )}
         />
         <Route
           exact
           path="/creategroup"
-          render={() => <CreateGroup games={this.state.games} />}
+          render={() => (
+            <CreateGroup
+              games={this.state.games}
+              user={this.state.user}
+              handleCreate={this.handleCreateGroup.bind(this)}
+            />
+          )}
+        />
+        <Route
+          path="/group"
+          render={() => <Groupview group={this.state.group} />}
         />
       </div>
     );

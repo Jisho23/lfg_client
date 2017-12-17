@@ -42,21 +42,27 @@ class CreateGroup extends Component {
     }
   }
 
+  handleGroupSearch(groupId) {
+    fetch(`http://localhost:3001/api/v1/group/${groupId}`);
+  }
+
   render() {
     return (
       <div>
         <Menu inverted size="large">
-          <Form inverted onSubmit={this.handleGameSearch.bind(this)}>
-            <Form.Select
-              width={8}
-              label="Search a game"
-              options={this.state.options}
-              placeholder="Time to choose..."
-              onChange={this.handleGameChange.bind(this)}
-              name="gameSearch"
-            />
-            <Form.Button type="submit">LFP...</Form.Button>
-          </Form>
+          <Menu.Item>
+            <Form inverted onSubmit={this.handleGameSearch.bind(this)}>
+              <Form.Select
+                width={8}
+                label="Search a game"
+                options={this.state.options}
+                placeholder="Time to choose..."
+                onChange={this.handleGameChange.bind(this)}
+                name="gameSearch"
+              />
+              <Form.Button type="submit">LFP...</Form.Button>
+            </Form>
+          </Menu.Item>
         </Menu>
         {!!this.state.error ? (
           <Message negative>
@@ -64,7 +70,11 @@ class CreateGroup extends Component {
           </Message>
         ) : null}
         {this.state.searched ? (
-          <CreateGroupForm gameInfo={this.state.game} />
+          <CreateGroupForm
+            gameInfo={this.state.game}
+            user={this.props.user}
+            handleCreate={this.props.handleCreate}
+          />
         ) : null}
       </div>
     );
