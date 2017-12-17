@@ -53,13 +53,16 @@ class Navbar extends Component {
             CreateGroup
           </Menu.Item>
         ) : null}
-        <Menu.Item
-          name="games"
-          onClick={this.handleItemClick}
-          active={activeItem === "games"}
-        >
-          Browse games
-        </Menu.Item>
+        {this.props.isLoggedIn ? (
+          <Menu.Item
+            name="games"
+            onClick={this.handleItemClick}
+            active={activeItem === "games"}
+          >
+            Browse games
+          </Menu.Item>
+        ) : null}
+
         {this.props.isLoggedIn ? (
           <Menu.Item
             name="logout"

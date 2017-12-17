@@ -42,7 +42,6 @@ class CreateGroupForm extends Component {
         gamers: this.state.gamers,
         userId: this.props.user.user.id
       };
-      debugger;
       this.props.handleCreate(form);
     }
   }

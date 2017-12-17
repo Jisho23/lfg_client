@@ -13,7 +13,6 @@ import "./App.css";
 class App extends Component {
   constructor() {
     super();
-
     this.state = {
       games: [],
       authorization: {
@@ -23,8 +22,6 @@ class App extends Component {
       user: {},
       group: {}
     };
-
-    this.handleLogout = this.handleLogout.bind(this);
   }
 
   resetError() {
@@ -160,8 +157,7 @@ class App extends Component {
 
   handleAcceptRejectInvite(action, invite_id) {
     const body = { toDo: action, inviteId: invite_id };
-    debugger;
-    fetch(`http://localhost:3001/api/v1/invites/{invite_id}`, {
+    fetch(`http://localhost:3001/api/v1/invites/${invite_id}`, {
       method: "PATCH",
       headers: new Headers({
         Accept: "application/json",
@@ -172,15 +168,35 @@ class App extends Component {
       .then(res => res.json())
       .then(json => {
         console.log(json);
+        if (action === "Leave Party?") {
+          this.props.history.push("/myprofile");
+        } else if (json.action === "reload") {
+          this.handleFindGroup(json.group_id);
+        }
         this.findCurrentUser();
-      });
+      })
+      .then();
+  }
+
+  handleDisbanGroup(groupId) {
+    fetch(`http://localhost:3001/api/v1/groups/${groupId}`, {
+      method: "DELETE",
+      headers: new Headers({
+        Accept: "application/json",
+        "Content-Type": "application/json"
+      }),
+      body: JSON.stringify({ group_id: groupId })
+    }).then(() => {
+      this.findCurrentUser();
+      this.props.history.push("/myprofile");
+    });
   }
 
   render() {
     return (
       <div>
         <Navbar
-          handleLogout={this.handleLogout}
+          handleLogout={this.handleLogout.bind(this)}
           isLoggedIn={this.state.authorization.isLoggedIn}
         />
         {!!this.state.error ? (
@@ -231,7 +247,14 @@ class App extends Component {
         />
         <Route
           path="/group"
-          render={() => <Groupview group={this.state.group} />}
+          render={() => (
+            <Groupview
+              group={this.state.group}
+              user={this.state.user}
+              handleDisban={this.handleDisbanGroup.bind(this)}
+              handleInvite={this.handleAcceptRejectInvite.bind(this)}
+            />
+          )}
         />
       </div>
     );

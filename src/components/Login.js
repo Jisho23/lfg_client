@@ -46,8 +46,7 @@ class Login extends Component {
               onChange={this.handleChange}
             />
           </Form.Group>
-          <Form.Checkbox label="I agree to the Terms and Conditions" />
-          <Button type="submit">Submit</Button>
+          <Button type="submit">Login</Button>
         </Form>
       </Segment>
     );

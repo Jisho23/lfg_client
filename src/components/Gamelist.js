@@ -1,5 +1,12 @@
 import React, { Component } from "react";
-import { Card, Image, Popup, Button, Segment } from "semantic-ui-react";
+import {
+  Card,
+  Image,
+  Popup,
+  Button,
+  Segment,
+  Container
+} from "semantic-ui-react";
 
 class Gamelist extends Component {
   constructor() {
@@ -12,15 +19,29 @@ class Gamelist extends Component {
       return (
         <Card raised>
           <Image src={game.image} />{" "}
-          <Segment textAlign="center">
-            <Card.Header>{game.name}</Card.Header>
-          </Segment>
+          <Card.Content>
+            <Segment textAlign="center">
+              <Card.Header>{game.name}</Card.Header>
+            </Segment>
+          </Card.Content>
           {this.props.appState.user.games.includes(game.id) ? (
-            <Button color="purple" onClick={this.handleClick} value={game.id}>
+            <Button
+              color="purple"
+              fluid
+              onClick={this.handleClick}
+              value={game.id}
+              attached="bottom"
+            >
               Remove Game From Collection
             </Button>
           ) : (
-            <Button color="violet" onClick={this.handleClick} value={game.id}>
+            <Button
+              color="violet"
+              attached="bottom"
+              fluid
+              onClick={this.handleClick}
+              value={game.id}
+            >
               Add Game to Collection
             </Button>
           )}
@@ -43,9 +64,11 @@ class Gamelist extends Component {
   render() {
     return (
       <div>
-        {this.props.appState.authorization.isLoggedIn ? (
-          <Card.Group itemsPerRow={4}>{this.getGames()}</Card.Group>
-        ) : null}
+        <Container>
+          {this.props.appState.authorization.isLoggedIn ? (
+            <Card.Group itemsPerRow={4}>{this.getGames()}</Card.Group>
+          ) : null}
+        </Container>
       </div>
     );
   }

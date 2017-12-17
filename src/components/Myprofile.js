@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import {
   Loader,
+  Header,
   Card,
   Segment,
   Divider,
@@ -9,7 +10,8 @@ import {
   Image,
   Item,
   Feed,
-  Message
+  Message,
+  Container
 } from "semantic-ui-react";
 
 class Myprofile extends Component {
@@ -104,63 +106,75 @@ class Myprofile extends Component {
     }
     return (
       <div>
-        <Segment>
-          <Segment.Group horizontal>
-            <Segment compact>
-              <Card centered>
-                <Image src={this.props.user.user.image} />
-                <Card.Content>
-                  <Card.Header>
-                    Username: {this.props.user.user.username}
-                  </Card.Header>
-                  {this.props.user.user.lfg ? (
-                    <Button circular positive onClick={this.handleLfg}>
-                      LFG
-                    </Button>
-                  ) : (
-                    <Button circular onClick={this.handleLfg}>
-                      LFG
-                    </Button>
-                  )}
-                </Card.Content>
-              </Card>
-            </Segment>
-            <Segment>
-              <Feed>
-                {this.props.user.invites.length > 0 ? null : (
-                  <Message warning>
-                    <Message.Header>
-                      You have no pending invites!
-                    </Message.Header>
-                  </Message>
-                )}
-                {this.props.user.invites.map(invite =>
-                  this.createInvite(invite)
-                )}
-              </Feed>
-            </Segment>
-          </Segment.Group>
-          <Segment.Group>
+        <Container fluid>
+          <Segment>
             <Segment.Group horizontal>
-              <Segment>
-                <Divider horizontal>My Groups</Divider>
-                <Card.Group>
-                  {this.props.user.groups.owner.map(group =>
-                    this.createCard(group, true)
-                  )}
-                </Card.Group>
+              <Segment compact>
+                <Card centered>
+                  <Image src={this.props.user.user.image} />
+                  <Card.Content>
+                    <Card.Header>
+                      Username: {this.props.user.user.username}
+                    </Card.Header>
+                    {this.props.user.user.lfg ? (
+                      <Button
+                        circular
+                        fluid
+                        color="green"
+                        onClick={this.handleLfg}
+                      >
+                        LFG
+                      </Button>
+                    ) : (
+                      <Button
+                        circular
+                        fluid
+                        color="violet"
+                        onClick={this.handleLfg}
+                      >
+                        Not LFG
+                      </Button>
+                    )}
+                  </Card.Content>
+                </Card>
               </Segment>
               <Segment>
-                <Divider horizontal>My Invited Groups</Divider>
-                <Card.Group>
-                  {this.props.user.groups.accepted_invites.map(group =>
-                    this.createCard(group, false)
+                <Feed>
+                  {this.props.user.invites.length > 0 ? null : (
+                    <Message warning>
+                      <Message.Header>
+                        You have no pending invites!
+                      </Message.Header>
+                    </Message>
                   )}
-                </Card.Group>
+                  {this.props.user.invites.map(invite =>
+                    this.createInvite(invite)
+                  )}
+                </Feed>
               </Segment>
             </Segment.Group>
-          </Segment.Group>
-        </Segment>
+            <Segment.Group>
+              <Segment.Group horizontal>
+                <Segment>
+                  <Divider horizontal>My Groups</Divider>
+                  <Card.Group>
+                    {this.props.user.groups.owner.map(group =>
+                      this.createCard(group, true)
+                    )}
+                  </Card.Group>
+                </Segment>
+                <Segment>
+                  <Divider horizontal>My Invited Groups</Divider>
+                  <Card.Group>
+                    {this.props.user.groups.accepted_invites.map(group =>
+                      this.createCard(group, false)
+                    )}
+                  </Card.Group>
+                </Segment>
+              </Segment.Group>
+            </Segment.Group>
+          </Segment>
+        </Container>
       </div>
     );
   }
