@@ -1,5 +1,12 @@
 import React, { Component } from "react";
-import { Label, Menu, Form, Button, Message } from "semantic-ui-react";
+import {
+  Label,
+  Menu,
+  Form,
+  Button,
+  Message,
+  Container
+} from "semantic-ui-react";
 import CreateGroupForm from "./CreateGroupForm";
 
 class CreateGroup extends Component {
@@ -49,33 +56,37 @@ class CreateGroup extends Component {
   render() {
     return (
       <div>
-        <Menu inverted size="large">
-          <Menu.Item>
-            <Form inverted onSubmit={this.handleGameSearch.bind(this)}>
-              <Form.Select
-                width={8}
-                label="Search a game"
-                options={this.state.options}
-                placeholder="Time to choose..."
-                onChange={this.handleGameChange.bind(this)}
-                name="gameSearch"
-              />
-              <Form.Button type="submit">LFP...</Form.Button>
-            </Form>
-          </Menu.Item>
-        </Menu>
-        {!!this.state.error ? (
-          <Message negative>
-            <Message.Header> {this.state.error}</Message.Header>{" "}
-          </Message>
-        ) : null}
-        {this.state.searched ? (
-          <CreateGroupForm
-            gameInfo={this.state.game}
-            user={this.props.user}
-            handleCreate={this.props.handleCreate}
-          />
-        ) : null}
+        <Container fluid>
+          <Menu inverted size="large">
+            <Menu.Item borderless>
+              <Form inverted onSubmit={this.handleGameSearch.bind(this)}>
+                <Form.Select
+                  width={8}
+                  label="Search a game"
+                  options={this.state.options}
+                  placeholder="Time to choose..."
+                  onChange={this.handleGameChange.bind(this)}
+                  name="gameSearch"
+                />
+                <Form.Button color="violet" circular type="submit">
+                  LFP...
+                </Form.Button>
+              </Form>
+            </Menu.Item>
+          </Menu>
+          {!!this.state.error ? (
+            <Message negative>
+              <Message.Header> {this.state.error}</Message.Header>{" "}
+            </Message>
+          ) : null}
+          {this.state.searched ? (
+            <CreateGroupForm
+              gameInfo={this.state.game}
+              user={this.props.user}
+              handleCreate={this.props.handleCreate}
+            />
+          ) : null}
+        </Container>
       </div>
     );
   }

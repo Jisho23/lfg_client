@@ -51,7 +51,9 @@ class Myprofile extends Component {
         </Card.Content>
         <div className="ui center aligned segment">
           <Button
-            color="blue"
+            circular
+            fluid
+            color="violet"
             value={group.group_id}
             onClick={this.handleGroupSelect.bind(this)}
           >

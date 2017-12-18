@@ -56,7 +56,7 @@ class CreateGroupForm extends Component {
         </Message>
         <Card.Group itemsPerRow={4}>
           {this.props.gameInfo.users.map(user => {
-            if (user.lfg) {
+            if (user.lfg && user.id != this.props.user.user.id) {
               return (
                 <Card raised>
                   <Card.Content>
