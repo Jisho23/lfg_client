@@ -58,6 +58,7 @@ class Gamelist extends Component {
     } else {
       performAction = "remove";
     }
+
     this.props.addRemoveGame(performAction, id.value);
   }
 

@@ -1,11 +1,15 @@
 import React, { Component } from "react";
 import { Route, withRouter } from "react-router-dom";
+
+import CreateUser from "./components/CreateUser.js";
 import Navbar from "./components/Nav.js";
 import Gamelist from "./components/Gamelist.js";
 import Login from "./components/Login.js";
 import Myprofile from "./components/Myprofile.js";
 import CreateGroup from "./components/Creategroup.js";
 import Groupview from "./components/Groupview.js";
+import * as Api from "./Api/Index.js";
+
 import {} from "semantic-ui-react";
 import logo from "./logo.svg";
 import "./App.css";
@@ -19,6 +23,7 @@ class App extends Component {
         isloggedIn: false
       },
       error: "",
+      success: "",
       user: {},
       group: {}
     };
@@ -26,6 +31,7 @@ class App extends Component {
 
   resetError() {
     this.setState({ error: "" });
+    this.setState({ success: "" });
   }
 
   componentDidMount = () => {
@@ -192,6 +198,24 @@ class App extends Component {
     });
   }
 
+  createUser(form) {
+    fetch(`http://localhost:3001/api/v1/users`, {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+        accept: "application/json",
+        Authorization: localStorage.getItem("jwt")
+      },
+      body: JSON.stringify(form)
+    })
+      .then(res => res.json())
+      .then(json => {
+        console.log(json);
+        this.props.history.push("/login");
+        this.setState({ success: "You have successfully created a new user!" });
+      });
+  }
+
   render() {
     return (
       <div>
@@ -201,6 +225,9 @@ class App extends Component {
         />
         {!!this.state.error ? (
           <div className="ui error message"> {this.state.error} </div>
+        ) : null}
+        {!!this.state.success ? (
+          <div className="ui success message"> {this.state.success} </div>
         ) : null}
         <Route exact path="/" render={() => <div>Test</div>} />
         <Route
@@ -246,6 +273,10 @@ class App extends Component {
           )}
         />
         <Route
+          path="/newuser"
+          render={() => <CreateUser onSubmit={this.createUser.bind(this)} />}
+        />
+        <Route
           path="/group"
           render={() => (
             <Groupview
@@ -260,5 +291,6 @@ class App extends Component {
     );
   }
 }
-
+//
+//
 export default withRouter(App);
