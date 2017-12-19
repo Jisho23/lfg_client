@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Route, withRouter } from "react-router-dom";
+import { withRouter } from "react-router-dom";
 import { Header, Menu } from "semantic-ui-react";
 
 class Navbar extends Component {
@@ -9,15 +9,13 @@ class Navbar extends Component {
     if (name === "logout") {
       this.props.handleLogout();
     } else {
-      this.setState({ activeItem: name });
       this.props.history.push(`/${name}`);
     }
   };
 
   render() {
-    const { activeItem } = this.state;
     return (
-      <Menu pointing inverted color={"black"}>
+      <Menu inverted color={"black"}>
         <Menu.Item name="header">
           <Header
             as="hs"
@@ -31,7 +29,7 @@ class Navbar extends Component {
           <Menu.Item
             name="myprofile"
             onClick={this.handleItemClick}
-            active={activeItem === "myprofile"}
+            active={this.props.nav === "myprofile"}
           >
             MyProfile
           </Menu.Item>
@@ -39,7 +37,7 @@ class Navbar extends Component {
           <Menu.Item
             name="login"
             onClick={this.handleItemClick}
-            active={activeItem === "login"}
+            active={this.props.nav === "login"}
           >
             Login
           </Menu.Item>
@@ -48,7 +46,7 @@ class Navbar extends Component {
           <Menu.Item
             name="creategroup"
             onClick={this.handleItemClick}
-            active={activeItem === "creategroup"}
+            active={this.props.nav === "creategroup"}
           >
             CreateGroup
           </Menu.Item>
@@ -57,7 +55,7 @@ class Navbar extends Component {
           <Menu.Item
             name="games"
             onClick={this.handleItemClick}
-            active={activeItem === "games"}
+            active={this.props.nav === "games"}
           >
             Browse games
           </Menu.Item>
@@ -67,7 +65,7 @@ class Navbar extends Component {
           <Menu.Item
             name="logout"
             onClick={this.handleItemClick.bind(this)}
-            active={activeItem === "login"}
+            active={this.props.nav === "login"}
           >
             LogOut
           </Menu.Item>

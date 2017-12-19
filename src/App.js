@@ -11,8 +11,6 @@ import Groupview from "./components/Groupview.js";
 import * as Api from "./Api/Index.js";
 
 import {} from "semantic-ui-react";
-import logo from "./logo.svg";
-import "./App.css";
 
 class App extends Component {
   constructor() {
@@ -25,7 +23,8 @@ class App extends Component {
       error: "",
       success: "",
       user: {},
-      group: {}
+      group: {},
+      nav: ""
     };
   }
 
@@ -33,6 +32,10 @@ class App extends Component {
     this.setState({ error: "" });
     this.setState({ success: "" });
   }
+
+  setNav = value => {
+    this.setState({ nav: value });
+  };
 
   componentDidMount = () => {
     this.fetchGames();
@@ -42,7 +45,7 @@ class App extends Component {
   };
 
   fetchGames = () => {
-    fetch("http://localhost:3001/api/v1/games")
+    Api.fetchGames()
       .then(res => res.json())
       .then(json => {
         this.setState({ games: json });
@@ -51,15 +54,7 @@ class App extends Component {
 
   login = form => {
     this.resetError();
-    fetch(`http://localhost:3001/api/v1/auth`, {
-      method: "POST",
-      headers: {
-        "content-type": "application/json",
-        accept: "application/json",
-        Authorization: localStorage.getItem("jwt")
-      },
-      body: JSON.stringify(form)
-    })
+    Api.login(form)
       .then(res => res.json())
       .then(json => {
         if (!json.error) {
@@ -76,152 +71,91 @@ class App extends Component {
   };
 
   findCurrentUser = () => {
-    return fetch(`http://localhost:3001/api/v1/current_user`, {
-      headers: {
-        "content-type": "application/json",
-        accept: "application/json",
-        Authorization: this.parseJwt(localStorage.getItem("jwt")).user_id
-      }
-    })
+    Api.findCurrentUser()
       .then(res => res.json())
       .then(json => {
         this.setState({ authorization: { isLoggedIn: true }, user: json });
       });
   };
 
-  parseJwt(token) {
-    const base64Url = token.split(".")[1];
-    const base64 = base64Url.replace("-", "+").replace("_", "/");
-    return JSON.parse(window.atob(base64));
-  }
-
-  updateUser(attribute, value) {
+  updateUser = (attribute, value) => {
     const newState = { ...this.state.user };
     newState.user[attribute] = value;
     this.setState({ newState });
-    fetch(`http://localhost:3001/api/v1/users/${this.state.user.user.id}`, {
-      method: "PATCH",
-      headers: new Headers({
-        Accept: "application/json",
-        "Content-Type": "application/json"
-      }),
-      body: JSON.stringify(newState)
-    });
-  }
+    Api.updateUser(this.state.user.user.id, newState);
+  };
 
-  addRemoveGame(performAction, gameId) {
-    const toDo = {
-      performAction: performAction,
-      gameId: gameId,
-      userId: this.state.user.user.id
-    };
-    fetch("http://localhost:3001/api/v1/addRemoveGame", {
-      method: "POST",
-      headers: new Headers({
-        Accept: "application/json",
-        "Content-Type": "application/json"
-      }),
-      body: JSON.stringify(toDo)
-    });
-    const state = this.state;
-    if (performAction === "add") {
-      state.user.games.push(gameId);
+  addRemoveGame = toDo => {
+    Api.fetchaddRemoveGame(toDo);
+    const newState = this.state;
+    if (toDo.performAction === "add") {
+      newState.user.games.push(toDo.gameId);
     } else {
-      state.user.games = state.user.games.filter(game => game !== gameId);
+      newState.user.games = newState.user.games.filter(
+        game => game !== toDo.gameId
+      );
     }
-    this.setState({ state });
-  }
+    this.setState({ newState });
+  };
 
-  handleLogout() {
+  handleLogout = () => {
     localStorage.removeItem("jwt");
     this.setState({ authorization: { isLoggedIn: false } });
     this.props.history.push(`/login`);
-  }
+  };
 
-  handleCreateGroup(form) {
-    fetch(`http://localhost:3001/api/v1/groups`, {
-      method: "POST",
-      headers: {
-        "content-type": "application/json",
-        accept: "application/json",
-        Authorization: localStorage.getItem("jwt")
-      },
-      body: JSON.stringify(form)
-    })
+  handleCreateGroup = form => {
+    Api.handleCreateGroup(form)
       .then(res => res.json())
       .then(json => this.setState({ group: json }))
       .then(() => this.findCurrentUser())
       .then(() => this.props.history.push("/group"));
-  }
+  };
 
-  handleFindGroup(groupId) {
-    fetch(`http://localhost:3001/api/v1/groups/${groupId}`)
+  handleFindGroup = groupId => {
+    Api.handleFindGroup(groupId)
       .then(res => res.json())
       .then(json => this.setState({ group: json }))
       .then(() => this.props.history.push("/group"));
-  }
+  };
 
-  handleAcceptRejectInvite(action, invite_id) {
+  handleAcceptRejectInvite = (action, invite_id) => {
     const body = { toDo: action, inviteId: invite_id };
-    fetch(`http://localhost:3001/api/v1/invites/${invite_id}`, {
-      method: "PATCH",
-      headers: new Headers({
-        Accept: "application/json",
-        "Content-Type": "application/json"
-      }),
-      body: JSON.stringify(body)
-    })
+    Api.handleAcceptRejectInvite(body)
       .then(res => res.json())
       .then(json => {
-        console.log(json);
         if (action === "Leave Party?") {
           this.props.history.push("/myprofile");
         } else if (json.action === "reload") {
           this.handleFindGroup(json.group_id);
         }
         this.findCurrentUser();
-      })
-      .then();
-  }
+      });
+  };
 
-  handleDisbanGroup(groupId) {
-    fetch(`http://localhost:3001/api/v1/groups/${groupId}`, {
-      method: "DELETE",
-      headers: new Headers({
-        Accept: "application/json",
-        "Content-Type": "application/json"
-      }),
-      body: JSON.stringify({ group_id: groupId })
-    }).then(() => {
+  handleDisbanGroup = groupId => {
+    Api.handleDisbanGroup(groupId).then(() => {
       this.findCurrentUser();
       this.props.history.push("/myprofile");
     });
-  }
+  };
 
-  createUser(form) {
-    fetch(`http://localhost:3001/api/v1/users`, {
-      method: "POST",
-      headers: {
-        "content-type": "application/json",
-        accept: "application/json",
-        Authorization: localStorage.getItem("jwt")
-      },
-      body: JSON.stringify(form)
-    })
+  createUser = form => {
+    Api.createUser(form)
       .then(res => res.json())
       .then(json => {
-        console.log(json);
         this.props.history.push("/login");
         this.setState({ success: "You have successfully created a new user!" });
       });
-  }
+  };
 
   render() {
     return (
       <div>
         <Navbar
-          handleLogout={this.handleLogout.bind(this)}
+          handleLogout={this.handleLogout}
           isLoggedIn={this.state.authorization.isLoggedIn}
+          nav={this.state.nav}
         />
         {!!this.state.error ? (
           <div className="ui error message"> {this.state.error} </div>
@@ -237,7 +171,8 @@ class App extends Component {
               <Gamelist
                 games={this.state.games}
                 appState={this.state}
-                addRemoveGame={this.addRemoveGame.bind(this)}
+                addRemoveGame={this.addRemoveGame}
+                setNav={this.setNav}
               />
             </div>
           )}
@@ -245,7 +180,12 @@ class App extends Component {
         <Route
           path="/login"
           render={() => (
-            <Login handleOnSubmit={this.login} appState={this.state} />
+            <Login
+              setNav={this.setNav}
+              handleOnSubmit={this.login}
+              appState={this.state}
+              setNav={this.setNav}
+            />
           )}
         />
         <Route
@@ -253,11 +193,10 @@ class App extends Component {
           render={() => (
             <Myprofile
               user={this.state.user}
-              updateUser={this.updateUser.bind(this)}
-              handleFindGroup={this.handleFindGroup.bind(this)}
-              handleAcceptRejectInvite={this.handleAcceptRejectInvite.bind(
-                this
-              )}
+              updateUser={this.updateUser}
+              handleFindGroup={this.handleFindGroup}
+              handleAcceptRejectInvite={this.handleAcceptRejectInvite}
+              setNav={this.setNav}
             />
           )}
         />
@@ -269,6 +208,7 @@ class App extends Component {
               games={this.state.games}
               user={this.state.user}
               handleCreate={this.handleCreateGroup.bind(this)}
+              setNav={this.setNav}
             />
           )}
         />
@@ -284,6 +224,7 @@ class App extends Component {
               user={this.state.user}
               handleDisban={this.handleDisbanGroup.bind(this)}
               handleInvite={this.handleAcceptRejectInvite.bind(this)}
+              setNav={this.setNav}
             />
           )}
         />

@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 // import { withRouter } from "react-router-dom";
-import { Button, Form, Segment, Container, Message } from "semantic-ui-react";
-import { Route, withRouter, Link } from "react-router-dom";
+import { Button, Form, Segment, Container } from "semantic-ui-react";
+import { withRouter, Link } from "react-router-dom";
 
 class Login extends Component {
   constructor() {
@@ -12,6 +12,9 @@ class Login extends Component {
         password: ""
       }
     };
+  }
+  componentDidMount() {
+    this.props.setNav("login");
   }
 
   handleChange = e => {

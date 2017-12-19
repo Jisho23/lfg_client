@@ -22,15 +22,14 @@ class CreateUser extends Component {
       terms: false,
       error: ""
     };
-    this.handleChange = this.handleChange.bind(this);
   }
 
-  handleChange(e) {
+  handleChange = e => {
     const newFields = { ...this.state.fields, [e.target.name]: e.target.value };
     this.setState({ fields: newFields });
-  }
+  };
 
-  handleSubmit(e) {
+  handleSubmit = e => {
     e.preventDefault();
     this.setState({ error: "" });
     if (!this.state.terms) {
@@ -43,18 +42,18 @@ class CreateUser extends Component {
     } else {
       this.props.handleOnSubmit(this.state.fields);
     }
-  }
+  };
 
-  handleToggle(e) {
+  handleToggle = e => {
     const newState = this.state.terms;
     this.setState({ terms: !newState });
-  }
+  };
 
   render() {
     return (
       <Container>
         <Segment inverted>
-          <Form inverted onSubmit={this.handleSubmit.bind(this)}>
+          <Form inverted onSubmit={this.handleSubmit}>
             <Form.Group widths="equal">
               <Form.Input
                 label="Username"
@@ -90,7 +89,7 @@ class CreateUser extends Component {
             <Form.Field
               control={Checkbox}
               label="I agree to the Terms and Conditions"
-              onChange={this.handleToggle.bind(this)}
+              onChange={this.handleToggle}
             />
             <Container>
               <Image src={this.state.fields.image} size="small" />

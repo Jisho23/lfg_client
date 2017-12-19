@@ -1,13 +1,7 @@
 import React, { Component } from "react";
-import {
-  Label,
-  Menu,
-  Form,
-  Button,
-  Message,
-  Container
-} from "semantic-ui-react";
+import { Menu, Form, Message, Container } from "semantic-ui-react";
 import CreateGroupForm from "./CreateGroupForm";
+import * as Api from "../Api/Index.js";
 
 class CreateGroup extends Component {
   constructor() {
@@ -28,30 +22,27 @@ class CreateGroup extends Component {
       value: game.id
     }));
     this.setState({ options: options });
+    this.props.setNav("creategroup");
   }
 
-  handleGameChange(e) {
+  handleGameChange = e => {
     this.setState({ gameSearch: e.target.innerText });
-  }
+  };
 
-  handleGameSearch(e) {
+  handleGameSearch = e => {
     e.preventDefault;
     if (this.state.gameSearch) {
       this.setState({ error: "" });
       const gameInfo = this.props.games.filter(
         game => game.name === this.state.gameSearch
       )[0];
-      fetch(`http://localhost:3001/api/v1/games/${gameInfo.id}`)
+      Api.fetchGameInfo(gameInfo.id)
         .then(res => res.json())
         .then(json => this.setState({ game: json, searched: true }));
     } else {
       this.setState({ error: "Please choose a game!" });
     }
-  }
-
-  handleGroupSearch(groupId) {
-    fetch(`http://localhost:3001/api/v1/group/${groupId}`);
-  }
+  };
 
   render() {
     return (
@@ -59,13 +50,13 @@ class CreateGroup extends Component {
         <Container fluid>
           <Menu inverted size="large">
             <Menu.Item borderless>
-              <Form inverted onSubmit={this.handleGameSearch.bind(this)}>
+              <Form inverted onSubmit={this.handleGameSearch}>
                 <Form.Select
                   width={8}
                   label="Search a game"
                   options={this.state.options}
                   placeholder="Time to choose..."
-                  onChange={this.handleGameChange.bind(this)}
+                  onChange={this.handleGameChange}
                   name="gameSearch"
                 />
                 <Form.Button color="violet" circular type="submit">

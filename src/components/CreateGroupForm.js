@@ -1,16 +1,7 @@
 import React, { Component } from "react";
-import {
-  Transition,
-  Message,
-  Form,
-  Checkbox,
-  Card,
-  Image,
-  Button,
-  Item,
-  Segment,
-  Container
-} from "semantic-ui-react";
+import { Message, Card, Image, Button, Container } from "semantic-ui-react";
+import * as Builders from "../Builders/Builders.js";
+
 class CreateGroupForm extends Component {
   constructor() {
     super();
@@ -19,11 +10,9 @@ class CreateGroupForm extends Component {
       gamersLfg: [],
       error: ""
     };
-    this.handleClick = this.handleClick.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
   }
 
-  handleClick(e, id) {
+  handleClick = (e, id) => {
     let newGamers = this.state.gamers;
     if (this.state.gamers.includes(id.value)) {
       newGamers = newGamers.filter(currentId => currentId !== id.value);
@@ -31,9 +20,9 @@ class CreateGroupForm extends Component {
       newGamers.push(id.value);
     }
     this.setState({ gamers: newGamers });
-  }
+  };
 
-  handleSubmit(e) {
+  handleSubmit = e => {
     this.setState({ error: "" });
     if (this.state.gamers.length === 0) {
       this.setState({ error: "Please invite at least one gamer." });
@@ -45,7 +34,7 @@ class CreateGroupForm extends Component {
       };
       this.props.handleCreate(form);
     }
-  }
+  };
 
   render() {
     return (
@@ -57,35 +46,12 @@ class CreateGroupForm extends Component {
         </Message>
         <Container>
           <Card.Group itemsPerRow={4}>
-            {this.props.gameInfo.users.map(user => {
-              if (user.lfg && user.id != this.props.user.user.id) {
-                return (
-                  <Card raised>
-                    <Card.Content>
-                      <Image floated="right" size="mini" src={user.image} />
-                      <Card.Header>{user.username}</Card.Header>
-                      {this.state.gamers.includes(user.id) ? (
-                        <Button
-                          color="purple"
-                          onClick={this.handleClick}
-                          value={user.id}
-                        >
-                          Remove
-                        </Button>
-                      ) : (
-                        <Button
-                          color="purple"
-                          onClick={this.handleClick}
-                          value={user.id}
-                        >
-                          Add
-                        </Button>
-                      )}
-                    </Card.Content>
-                  </Card>
-                );
-              }
-            })}
+            {Builders.createGamerCards(
+              this.props.gameInfo.users,
+              this.props.user.user.id,
+              this.state.gamers,
+              this.handleClick
+            )}
           </Card.Group>
         </Container>
         <div className="ui center aligned segment">
