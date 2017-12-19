@@ -16,3 +16,5 @@ Use:
 4) Users can create new groups on the create group page and look for players playing any game. This sends and invite to those users who will only be able to have access to the chat and group view upon accepting an invite.
 5) Users can view groups by following a clickable link on their myprofile page.
 6) From the group view, the owner can kick players or disban. Other players can leave the group. All members of a group can use the chat feature. 
+
+NOTE: This is a work in progress and not all features have been fully implamented (such as the 'honoring' feature, although the models do exist on the backend). More will be completed during the months of December 2017 and January 2018.
