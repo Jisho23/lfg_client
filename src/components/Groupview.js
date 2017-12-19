@@ -1,15 +1,7 @@
 import React, { Component } from "react";
 import * as Builders from "../Builders/Builders.js";
-import {
-  Card,
-  Image,
-  Button,
-  Segment,
-  Divider,
-  Loader,
-  Item,
-  Message
-} from "semantic-ui-react";
+import { Card, Segment, Divider, Loader } from "semantic-ui-react";
+import Chats from "./Chats.js";
 
 class Groupview extends Component {
   state = {};
@@ -72,6 +64,7 @@ class Groupview extends Component {
           <Segment.Group>
             <Segment>
               <Divider horizontal>Messages</Divider>
+              <Chats group={this.props.group} user={this.props.user.user} />
             </Segment>
           </Segment.Group>
         </Segment.Group>

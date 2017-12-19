@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Message, Card, Image, Button, Container } from "semantic-ui-react";
+import { Message, Card, Button, Container } from "semantic-ui-react";
 import * as Builders from "../Builders/Builders.js";
 
 class CreateGroupForm extends Component {

@@ -1,11 +1,10 @@
-import React, { Component } from "react";
+import React from "react";
 import {
   Message,
   Segment,
   Card,
   Image,
   Button,
-  Container,
   Item,
   Divider,
   Feed
@@ -45,6 +44,7 @@ export const createGameCards = (games, user, handleClick) => {
         <Segment textAlign="center">
           <Card.Header>{game.name}</Card.Header>
         </Segment>
+        <Segment textAlign="center">Platform: {game.platform}</Segment>
         {user.games.includes(game.id) ? (
           <Button
             color="purple"
@@ -75,18 +75,9 @@ export const createPartyMember = (member, user, group, handleInvite) => {
   return (
     <Card centered raised>
       <Card.Content>
-        <Item>
-          <Item.Image
-            size="tiny"
-            floated="right"
-            src={member.recipient.image}
-          />
-          <Item.Content verticalAlign="middle">
-            <Item.Header floated="center">
-              {member.recipient.username}
-            </Item.Header>
-          </Item.Content>
-        </Item>
+        <Image size="tiny" floated="right" src={member.recipient.image} />
+        <Card.Header floated="center">{member.recipient.username}</Card.Header>
+        <Card.Meta> - "{member.recipient.status}"</Card.Meta>
       </Card.Content>
       {user.user.id === group.owner.id ? (
         <Button
@@ -142,6 +133,9 @@ export const partyInfoCard = (group, user, handleDisban) => {
           <Image floated="right" size="tiny" src={group.game.image} />
           <Card.Header>{group.game.name}</Card.Header>
         </Card.Content>
+        <Card.Content>
+          <Segment>Platform: {group.game.platform}</Segment>
+        </Card.Content>
       </Card>
     </Card.Group>
   );
@@ -192,8 +186,7 @@ export const createInvite = (invite, handleInvite) => {
       <Feed.Label image={invite.game.image} />
       <Feed.Content>
         <Feed.Summary>
-          <a>{invite.sender.username}</a> invited you to play{" "}
-          <a>{invite.game.name}</a>
+          {invite.sender.username} invited you to play {invite.game.name}!
         </Feed.Summary>
         <Feed.Extra images>
           <Button positive value={invite.invite_id} onClick={handleInvite}>

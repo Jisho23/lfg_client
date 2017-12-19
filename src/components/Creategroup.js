@@ -30,7 +30,7 @@ class CreateGroup extends Component {
   };
 
   handleGameSearch = e => {
-    e.preventDefault;
+    e.preventDefault();
     if (this.state.gameSearch) {
       this.setState({ error: "" });
       const gameInfo = this.props.games.filter(

@@ -7,14 +7,11 @@ import {
   Divider,
   Button,
   Image,
-  Item,
   Feed,
-  Message,
   Container,
   Menu,
   Grid,
   Header,
-  Icon,
   Form
 } from "semantic-ui-react";
 
@@ -34,7 +31,7 @@ class Myprofile extends Component {
   };
 
   handleSubmit = (e, value) => {
-    e.preventDefault;
+    e.preventDefault();
     this.props.updateUser("status", this.state.status);
     this.setState({ status: "" });
   };
@@ -44,7 +41,6 @@ class Myprofile extends Component {
   };
 
   handleChange = e => {
-    const newFields = { ...this.state, [e.target.name]: e.target.value };
     this.setState({ [e.target.name]: e.target.value });
   };
 
@@ -79,7 +75,7 @@ class Myprofile extends Component {
                       value={this.state.status}
                       onChange={this.handleChange}
                     />
-                    <Form.Button rounded fluid color="violet">
+                    <Form.Button fluid color="violet">
                       UpdateStatus
                     </Form.Button>
                   </Form>
@@ -154,7 +150,7 @@ class Myprofile extends Component {
                   </Container>
                 ) : null}
                 {this.state.view === "MyInvited" ? (
-                  <Container compact>
+                  <Container>
                     {" "}
                     <Header as="h3" textAlign="center">
                       My Invited Groups

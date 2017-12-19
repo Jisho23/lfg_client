@@ -184,7 +184,6 @@ class App extends Component {
               setNav={this.setNav}
               handleOnSubmit={this.login}
               appState={this.state}
-              setNav={this.setNav}
             />
           )}
         />
@@ -232,6 +231,5 @@ class App extends Component {
     );
   }
 }
-//
-//
+// <Chats />
 export default withRouter(App);

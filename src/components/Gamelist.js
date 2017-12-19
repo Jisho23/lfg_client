@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Card, Image, Button, Segment, Container } from "semantic-ui-react";
+import { Card, Container } from "semantic-ui-react";
 import * as Builders from "../Builders/Builders.js";
 
 class Gamelist extends Component {
