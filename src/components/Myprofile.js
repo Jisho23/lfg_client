@@ -66,7 +66,7 @@ class Myprofile extends Component {
                 <Card.Header>
                   Username: {this.props.user.user.username}
                 </Card.Header>
-                <Segment>Honor: {this.props.user.honor}</Segment>
+                <Segment>Honor: {this.props.user.honor.length}</Segment>
                 <Segment>
                   <Form onSubmit={this.handleSubmit}>
                     <Form.Input
@@ -81,7 +81,7 @@ class Myprofile extends Component {
                   </Form>
                 </Segment>
                 {this.props.user.user.lfg ? (
-                  <Button circular fluid color="green" onClick={this.handleLfg}>
+                  <Button circular fluid color="blue" onClick={this.handleLfg}>
                     LFG
                   </Button>
                 ) : (
@@ -100,7 +100,7 @@ class Myprofile extends Component {
           <Segment>
             <Grid>
               <Grid.Column width={3}>
-                <Menu vertical tabular>
+                <Menu tabular>
                   <Menu.Item
                     name="Feed"
                     active={this.state.view === "Feed"}
@@ -118,56 +118,60 @@ class Myprofile extends Component {
                   />
                 </Menu>
               </Grid.Column>
-              <Grid.Column width={12}>
-                {this.state.view === "Feed" ? (
-                  <Container>
-                    {" "}
-                    <Header as="h3" textAlign="center">
-                      Feed
-                    </Header>
-                    <Divider />
-                    <Feed>
-                      {this.props.user.invites.map(invite =>
-                        Builders.createInvite(invite, this.handleInvite)
-                      )}
-                    </Feed>
-                  </Container>
-                ) : null}
-                {this.state.view === "MyGroups" ? (
-                  <Container>
-                    {" "}
-                    <Header as="h3" textAlign="center">
-                      My Groups
-                    </Header>
-                    <Divider />
-                    <Card.Group>
-                      {Builders.createCardGroup(
-                        this.props.user.groups.owner,
-                        true,
-                        this.handleGroupSelect
-                      )}
-                    </Card.Group>{" "}
-                  </Container>
-                ) : null}
-                {this.state.view === "MyInvited" ? (
-                  <Container>
-                    {" "}
-                    <Header as="h3" textAlign="center">
-                      My Invited Groups
-                    </Header>
-                    <Divider />
-                    <Card.Group>
-                      {this.props.user.groups.accepted_invites.map(group =>
-                        Builders.createCard(
-                          group,
-                          false,
+              <Container>
+                <Grid.Column width={12}>
+                  {this.state.view === "Feed" ? (
+                    <Container>
+                      {" "}
+                      <Header as="h3" textAlign="center">
+                        Feed
+                      </Header>
+                      <Divider />
+                      <Segment>
+                        <Feed>
+                          {this.props.user.invites.map(invite =>
+                            Builders.createInvite(invite, this.handleInvite)
+                          )}
+                        </Feed>
+                      </Segment>
+                    </Container>
+                  ) : null}
+                  {this.state.view === "MyGroups" ? (
+                    <Container>
+                      {" "}
+                      <Header as="h3" textAlign="center">
+                        My Groups
+                      </Header>
+                      <Divider />
+                      <Card.Group>
+                        {Builders.createCardGroup(
+                          this.props.user.groups.owner,
+                          true,
                           this.handleGroupSelect
-                        )
-                      )}
-                    </Card.Group>
-                  </Container>
-                ) : null}
-              </Grid.Column>
+                        )}
+                      </Card.Group>{" "}
+                    </Container>
+                  ) : null}
+                  {this.state.view === "MyInvited" ? (
+                    <Container>
+                      {" "}
+                      <Header as="h3" textAlign="center">
+                        My Invited Groups
+                      </Header>
+                      <Divider />
+                      <Card.Group>
+                        {this.props.user.groups.accepted_invites.map(group =>
+                          Builders.createCard(
+                            group,
+                            false,
+                            this.handleGroupSelect
+                          )
+                        )}
+                      </Card.Group>
+                    </Container>
+                  ) : null}
+                </Grid.Column>
+              </Container>
             </Grid>
           </Segment>
         </Segment.Group>

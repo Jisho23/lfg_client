@@ -28,7 +28,7 @@ class CreateGroupForm extends Component {
       this.setState({ error: "Please invite at least one gamer." });
     } else {
       const form = {
-        gameId: this.props.gameInfo.id,
+        gameId: this.props.gameInfo.game.id,
         gamers: this.state.gamers,
         userId: this.props.user.user.id
       };
@@ -41,7 +41,8 @@ class CreateGroupForm extends Component {
       <div>
         <Message positive>
           <Message.Header>
-            Gamers who are currently looking to play {this.props.gameInfo.name}...
+            Gamers who are currently looking to play{" "}
+            {this.props.gameInfo.game.name}...
           </Message.Header>
         </Message>
         <Container>

@@ -100,6 +100,17 @@ export const fetchGameInfo = gameId => {
   return fetch(URL + `/games/${gameId}`);
 };
 
+export const handleHonor = form => {
+  return fetch(URL + "/honor", {
+    method: "POST",
+    headers: new Headers({
+      Accept: "application/json",
+      "Content-Type": "application/json"
+    }),
+    body: JSON.stringify(form)
+  });
+};
+
 const parseJwt = token => {
   const base64Url = token.split(".")[1];
   const base64 = base64Url.replace("-", "+").replace("_", "/");

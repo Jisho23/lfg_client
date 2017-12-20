@@ -124,9 +124,11 @@ class App extends Component {
     Api.handleAcceptRejectInvite(body)
       .then(res => res.json())
       .then(json => {
+        debugger;
         if (action === "Leave Party?") {
           this.props.history.push("/myprofile");
         } else if (json.action === "reload") {
+          debugger;
           this.handleFindGroup(json.group_id);
         }
         this.findCurrentUser();
@@ -146,6 +148,15 @@ class App extends Component {
       .then(json => {
         this.props.history.push("/login");
         this.setState({ success: "You have successfully created a new user!" });
+      });
+  };
+
+  handleHonor = honorInfo => {
+    Api.handleHonor(honorInfo)
+      .then(res => res.json())
+      .then(json => {
+        console.log(json);
+        this.findCurrentUser();
       });
   };
 
@@ -224,6 +235,7 @@ class App extends Component {
               handleDisban={this.handleDisbanGroup.bind(this)}
               handleInvite={this.handleAcceptRejectInvite.bind(this)}
               setNav={this.setNav}
+              handleHonor={this.handleHonor}
             />
           )}
         />

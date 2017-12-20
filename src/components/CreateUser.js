@@ -40,7 +40,7 @@ class CreateUser extends Component {
     ) {
       this.setState({ error: "Please make sure your passwords match!" });
     } else {
-      this.props.handleOnSubmit(this.state.fields);
+      this.props.onSubmit(this.state.fields);
     }
   };
 

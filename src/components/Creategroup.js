@@ -49,7 +49,7 @@ class CreateGroup extends Component {
       <div>
         <Container fluid>
           <Menu inverted size="large">
-            <Menu.Item borderless>
+            <Menu.Item>
               <Form inverted onSubmit={this.handleGameSearch}>
                 <Form.Select
                   width={8}

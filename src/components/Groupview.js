@@ -1,12 +1,12 @@
 import React, { Component } from "react";
 import * as Builders from "../Builders/Builders.js";
-import { Card, Segment, Divider, Loader } from "semantic-ui-react";
+import { Card, Segment, Divider } from "semantic-ui-react";
 import Chats from "./Chats.js";
+import { withRouter } from "react-router-dom";
 
 class Groupview extends Component {
   state = {};
   componentDidMount() {
-    console.log(this.props.group);
     this.props.setNav("");
   }
 
@@ -18,9 +18,15 @@ class Groupview extends Component {
     this.props.handleDisban(index.value);
   };
 
+  handleHonor = (e, index) => {
+    index.value.honorer = this.props.user.user.id;
+    this.props.handleHonor(index.value);
+  };
+
   render() {
     if (!this.props.group.owner) {
-      return <Loader />;
+      this.props.history.push("/myprofile");
+      return null;
     }
     return (
       <Segment.Group>
@@ -31,7 +37,8 @@ class Groupview extends Component {
               {Builders.partyInfoCard(
                 this.props.group,
                 this.props.user,
-                this.handleDisban
+                this.handleDisban,
+                this.handleHonor
               )}
             </Segment>
             <Segment>
@@ -42,7 +49,8 @@ class Groupview extends Component {
                     member,
                     this.props.user,
                     this.props.group,
-                    this.handleInvite
+                    this.handleInvite,
+                    this.handleHonor
                   )
                 )}
               </Card.Group>
@@ -55,7 +63,8 @@ class Groupview extends Component {
                     member,
                     this.props.user,
                     this.props.group,
-                    this.handleInvite
+                    this.handleInvite,
+                    this.handleHonor
                   )
                 )}
               </Card.Group>
@@ -72,4 +81,4 @@ class Groupview extends Component {
     );
   }
 }
-export default Groupview;
+export default withRouter(Groupview);

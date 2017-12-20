@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import ActionCable from "actioncable";
-import { Container, Form, Button, Segment, Image } from "semantic-ui-react";
+import { Form, Button, Segment, Image, Card } from "semantic-ui-react";
 
 export default class Chats extends Component {
   constructor(props, _railsContext) {
@@ -16,7 +16,7 @@ export default class Chats extends Component {
     const newMessages = this.state.chats;
     newMessages.unshift(chat);
     if (newMessages.length > 10) {
-      newMessages.pop;
+      newMessages.pop();
     }
     this.setState({
       chats: newMessages
@@ -62,7 +62,7 @@ export default class Chats extends Component {
       <div>
         <Segment>
           <Form onSubmit={this.handlePostMessage}>
-            <Form.Group fluid>
+            <Form.Group>
               <Form.Input
                 value={this.state.message}
                 onChange={this.handleChange}
@@ -71,14 +71,22 @@ export default class Chats extends Component {
             </Form.Group>
           </Form>
         </Segment>
-        <Segment.Group>
+        <Card.Group>
           {this.state.chats.map(message => (
-            <Segment small piled>
-              <Image src={message.image} avatar />
-              {message.content}
-            </Segment>
+            <Card fluid>
+              <Card.Content>
+                <Image
+                  floated="left"
+                  src={message.image}
+                  size="mini"
+                  bordered
+                />
+                {"   "}
+                {message.content}
+              </Card.Content>
+            </Card>
           ))}
-        </Segment.Group>
+        </Card.Group>
       </div>
     );
   }
