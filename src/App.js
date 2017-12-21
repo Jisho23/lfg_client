@@ -127,8 +127,7 @@ class App extends Component {
         debugger;
         if (action === "Leave Party?") {
           this.props.history.push("/myprofile");
-        } else if (json.action === "reload") {
-          debugger;
+        } else if (json.invite_status === "Invite Accepted!") {
           this.handleFindGroup(json.group_id);
         }
         this.findCurrentUser();
@@ -158,6 +157,11 @@ class App extends Component {
         console.log(json);
         this.findCurrentUser();
       });
+  };
+
+  addToParty = form => {
+    debugger;
+    Api.addNewPlayer(form).then(() => this.handleFindGroup(form.groupId));
   };
 
   render() {
@@ -236,6 +240,7 @@ class App extends Component {
               handleInvite={this.handleAcceptRejectInvite.bind(this)}
               setNav={this.setNav}
               handleHonor={this.handleHonor}
+              addToParty={this.addToParty}
             />
           )}
         />

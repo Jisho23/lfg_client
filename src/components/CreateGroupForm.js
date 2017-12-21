@@ -38,7 +38,7 @@ class CreateGroupForm extends Component {
 
   render() {
     return (
-      <div>
+      <Container>
         <Message positive>
           <Message.Header>
             Gamers who are currently looking to play{" "}
@@ -65,7 +65,7 @@ class CreateGroupForm extends Component {
             <Message.Header> {this.state.error}</Message.Header>{" "}
           </Message>
         ) : null}
-      </div>
+      </Container>
     );
   }
 }

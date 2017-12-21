@@ -10,7 +10,6 @@ import {
   Feed,
   Container,
   Menu,
-  Grid,
   Header,
   Form
 } from "semantic-ui-react";
@@ -66,7 +65,10 @@ class Myprofile extends Component {
                 <Card.Header>
                   Username: {this.props.user.user.username}
                 </Card.Header>
-                <Segment>Honor: {this.props.user.honor.length}</Segment>
+                <Segment textAlign="center">
+                  <strong>Honor: </strong>
+                  {this.props.user.honor.length}
+                </Segment>
                 <Segment>
                   <Form onSubmit={this.handleSubmit}>
                     <Form.Input
@@ -98,81 +100,71 @@ class Myprofile extends Component {
             </Card>
           </Segment>
           <Segment>
-            <Grid>
-              <Grid.Column width={3}>
-                <Menu tabular>
-                  <Menu.Item
-                    name="Feed"
-                    active={this.state.view === "Feed"}
-                    onClick={this.changeView}
-                  />
-                  <Menu.Item
-                    active={this.state.view === "MyGroups"}
-                    name="MyGroups"
-                    onClick={this.changeView}
-                  />
-                  <Menu.Item
-                    active={this.state.view === "MyInvited"}
-                    name="MyInvited"
-                    onClick={this.changeView}
-                  />
-                </Menu>
-              </Grid.Column>
-              <Container>
-                <Grid.Column width={12}>
-                  {this.state.view === "Feed" ? (
-                    <Container>
-                      {" "}
-                      <Header as="h3" textAlign="center">
-                        Feed
-                      </Header>
-                      <Divider />
-                      <Segment>
-                        <Feed>
-                          {this.props.user.invites.map(invite =>
-                            Builders.createInvite(invite, this.handleInvite)
-                          )}
-                        </Feed>
-                      </Segment>
-                    </Container>
-                  ) : null}
-                  {this.state.view === "MyGroups" ? (
-                    <Container>
-                      {" "}
-                      <Header as="h3" textAlign="center">
-                        My Groups
-                      </Header>
-                      <Divider />
-                      <Card.Group>
-                        {Builders.createCardGroup(
-                          this.props.user.groups.owner,
-                          true,
-                          this.handleGroupSelect
-                        )}
-                      </Card.Group>{" "}
-                    </Container>
-                  ) : null}
-                  {this.state.view === "MyInvited" ? (
-                    <Container>
-                      {" "}
-                      <Header as="h3" textAlign="center">
-                        My Invited Groups
-                      </Header>
-                      <Divider />
-                      <Card.Group>
-                        {this.props.user.groups.accepted_invites.map(group =>
-                          Builders.createCard(
-                            group,
-                            false,
-                            this.handleGroupSelect
-                          )
-                        )}
-                      </Card.Group>
-                    </Container>
-                  ) : null}
-                </Grid.Column>
-              </Container>
-            </Grid>
+            <Menu inverted attached="top" tabular>
+              <Menu.Item
+                name="Feed"
+                active={this.state.view === "Feed"}
+                onClick={this.changeView}
+              />
+              <Menu.Item
+                active={this.state.view === "MyGroups"}
+                name="MyGroups"
+                onClick={this.changeView}
+              />
+              <Menu.Item
+                active={this.state.view === "MyInvited"}
+                name="MyInvited"
+                onClick={this.changeView}
+              />
+            </Menu>
+            <Segment attached="bottom">
+              {this.state.view === "Feed" ? (
+                <Container>
+                  {" "}
+                  <Header as="h3" textAlign="center">
+                    Feed
+                  </Header>
+                  <Divider />
+                  <Segment>
+                    <Feed>
+                      {this.props.user.invites.map(invite =>
+                        Builders.createInvite(invite, this.handleInvite)
+                      )}
+                    </Feed>
+                  </Segment>
+                </Container>
+              ) : null}
+              {this.state.view === "MyGroups" ? (
+                <Container>
+                  {" "}
+                  <Header as="h3" textAlign="center">
+                    My Groups
+                  </Header>
+                  <Divider />
+                  <Card.Group>
+                    {Builders.createCardGroup(
+                      this.props.user.groups.owner,
+                      true,
+                      this.handleGroupSelect
+                    )}
+                  </Card.Group>{" "}
+                </Container>
+              ) : null}
+              {this.state.view === "MyInvited" ? (
+                <Container>
+                  {" "}
+                  <Header as="h3" textAlign="center">
+                    My Invited Groups
+                  </Header>
+                  <Divider />
+                  <Card.Group>
+                    {this.props.user.groups.accepted_invites.map(group =>
+                      Builders.createCard(group, false, this.handleGroupSelect)
+                    )}
+                  </Card.Group>
+                </Container>
+              ) : null}
+            </Segment>
           </Segment>
         </Segment.Group>
       </Container>

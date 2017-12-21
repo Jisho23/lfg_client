@@ -22,11 +22,11 @@ export const createGamerCards = (users, currentUser, gamers, onToggle) => {
           </Card.Content>
           {gamers.includes(user.id) ? (
             <Button color="violet" onClick={onToggle} value={user.id}>
-              Remove
+              Remove from party
             </Button>
           ) : (
             <Button color="blue" onClick={onToggle} value={user.id}>
-              Add
+              Add to party
             </Button>
           )}
         </Card>
@@ -38,14 +38,16 @@ export const createGamerCards = (users, currentUser, gamers, onToggle) => {
 export const createGameCards = (games, user, handleClick) => {
   return games.map(game => {
     return (
-      <Card key={game.id} raised>
+      <Card key={game.id} color="violet" raised>
         <Card.Content>
           <Image bordered src={game.image} />{" "}
         </Card.Content>
-        <Segment textAlign="center">
-          <Card.Header>{game.name}</Card.Header>
-        </Segment>
-        <Segment textAlign="center">Platform: {game.platform}</Segment>
+        <Segment.Group>
+          <Segment textAlign="center">
+            <Card.Header>{game.name}</Card.Header>
+          </Segment>
+          <Segment textAlign="center">Platform: {game.platform}</Segment>
+        </Segment.Group>
         {user.games.includes(game.id) ? (
           <Button
             color="purple"
@@ -81,45 +83,41 @@ export const createPartyMember = (
 ) => {
   return (
     <Card key={member.recipient.id} centered raised>
+      {user.honored
+        .map(honor => honor.honored_id)
+        .includes(member.recipient.id) ? (
+        <Button
+          icon
+          color="yellow"
+          value={{ toDo: "remove", honored: member.recipient.id }}
+          onClick={handleHonor}
+        >
+          <Icon name="star" />
+          Unhonor player
+        </Button>
+      ) : null}
+      {!user.honored
+        .map(honor => honor.honored_id)
+        .includes(member.recipient.id) &&
+      user.user.id !== member.recipient.id ? (
+        <Button
+          icon
+          color="violet"
+          value={{ toDo: "honor", honored: member.recipient.id }}
+          onClick={handleHonor}
+        >
+          <Icon name="star" />
+          Honor Player
+        </Button>
+      ) : null}
+      <Image bordered src={member.recipient.image} />
       <Card.Content>
-        <Image
-          bordered
-          size="tiny"
-          floated="right"
-          src={member.recipient.image}
-        />
         <Card.Header floated="center">{member.recipient.username}</Card.Header>
         <Card.Meta> - "{member.recipient.status}"</Card.Meta>
-        {user.honored
-          .map(honor => honor.honored_id)
-          .includes(member.recipient.id) ? (
-          <Button
-            icon
-            color="yellow"
-            value={{ toDo: "remove", honored: member.recipient.id }}
-            onClick={handleHonor}
-          >
-            <Icon name="star" />
-          </Button>
-        ) : null}
-        {!user.honored
-          .map(honor => honor.honored_id)
-          .includes(member.recipient.id) &&
-        user.user.id !== member.recipient.id ? (
-          <Button
-            icon
-            color="grey"
-            value={{ toDo: "honor", honored: member.recipient.id }}
-            onClick={handleHonor}
-          >
-            <Icon name="star" />
-          </Button>
-        ) : null}
       </Card.Content>
       {user.user.id === group.owner.id ? (
         <Button
           color="violet"
-          fluid
           value={member.invite_id}
           onClick={handleInvite}
           attached="bottom"
@@ -128,13 +126,7 @@ export const createPartyMember = (
         </Button>
       ) : null}
       {member.recipient.id === user.user.id ? (
-        <Button
-          fluid
-          attached="bottom"
-          value={member.invite_id}
-          onClick={handleInvite}
-          color="violet"
-        >
+        <Button value={member.invite_id} onClick={handleInvite} color="violet">
           Leave Party?
         </Button>
       ) : null}
@@ -146,35 +138,41 @@ export const partyInfoCard = (group, user, handleDisban, handleHonor) => {
   return (
     <Card.Group>
       <Card centered key={group.id}>
+        {user.honored
+          .map(honor => honor.honored_id)
+          .includes(group.owner.id) ? (
+          <Button
+            icon
+            attached="top"
+            color="yellow"
+            fluid
+            value={{ toDo: "remove", honored: group.owner.id }}
+            onClick={handleHonor}
+          >
+            <Icon name="star" />
+            Unhonor Player
+          </Button>
+        ) : null}
+        {!user.honored
+          .map(honor => honor.honored_id)
+          .includes(group.owner.id) && group.owner.id !== user.user.id ? (
+          <Button
+            icon
+            attached="top"
+            color="violet"
+            fluid
+            value={{ toDo: "honor", honored: group.owner.id }}
+            onClick={handleHonor}
+          >
+            <Icon name="star" />
+            Honor Player
+          </Button>
+        ) : null}
         <Card.Content>
           <Divider horizontal>Owner</Divider>
           <Image floated="right" size="tiny" bordered src={group.owner.image} />
           <Card.Header>{group.owner.username}</Card.Header>
           <Card.Meta> - "{group.owner.status}"</Card.Meta>
-          {user.honored
-            .map(honor => honor.honored_id)
-            .includes(group.owner.id) ? (
-            <Button
-              icon
-              color="yellow"
-              value={{ toDo: "remove", honored: group.owner.id }}
-              onClick={handleHonor}
-            >
-              <Icon name="star" />
-            </Button>
-          ) : null}
-          {!user.honored
-            .map(honor => honor.honored_id)
-            .includes(group.owner.id) && group.owner.id !== user.user.id ? (
-            <Button
-              icon
-              color="violet"
-              value={{ toDo: "honor", honored: group.owner.id }}
-              onClick={handleHonor}
-            >
-              <Icon name="star" />
-            </Button>
-          ) : null}
         </Card.Content>
         {user.user.id === group.owner.id ? (
           <Message warning>

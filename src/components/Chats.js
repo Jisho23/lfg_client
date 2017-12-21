@@ -66,6 +66,7 @@ export default class Chats extends Component {
               <Form.Input
                 value={this.state.message}
                 onChange={this.handleChange}
+                width={14}
               />
               <Button type="submit">Submit</Button>
             </Form.Group>
