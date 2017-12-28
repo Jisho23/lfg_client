@@ -28,34 +28,36 @@ class Login extends Component {
 
   render() {
     return (
-      <Container>
-        <Segment inverted>
-          <Form inverted onSubmit={this.handleSubmit}>
-            <Form.Group widths="equal">
-              <Form.Input
-                label="Username"
-                placeholder="username"
-                name="username"
-                value={this.state.username}
-                onChange={this.handleChange}
-              />
-              <Form.Input
-                label="Password"
-                placeholder="password"
-                type="password"
-                name="password"
-                value={this.state.password}
-                onChange={this.handleChange}
-              />
-            </Form.Group>
-            <Button type="submit">Login</Button>
-          </Form>
-          <Container>
-            {" "}
-            New User? Click <Link to="/newuser"> here </Link> to register!
-          </Container>
-        </Segment>
-      </Container>
+      <div>
+        <Container>
+          <Segment inverted>
+            <Form inverted onSubmit={this.handleSubmit}>
+              <Form.Group widths="equal">
+                <Form.Input
+                  label="Username"
+                  placeholder="username"
+                  name="username"
+                  value={this.state.username}
+                  onChange={this.handleChange}
+                />
+                <Form.Input
+                  label="Password"
+                  placeholder="password"
+                  type="password"
+                  name="password"
+                  value={this.state.password}
+                  onChange={this.handleChange}
+                />
+              </Form.Group>
+              <Button type="submit">Login</Button>
+            </Form>
+            <Container>
+              {" "}
+              New User? Click <Link to="/newuser"> here </Link> to register!
+            </Container>
+          </Segment>
+        </Container>
+      </div>
     );
   }
 }

@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { withRouter } from "react-router-dom";
+import { withRouter, Link } from "react-router-dom";
 import { Header, Menu } from "semantic-ui-react";
 
 class Navbar extends Component {
@@ -16,14 +16,16 @@ class Navbar extends Component {
   render() {
     return (
       <Menu inverted color={"black"}>
-        <Menu.Item name="header">
-          <Header
-            as="hs"
-            content="LFG"
-            subheader="A better way to party"
-            inverted
-          />
-        </Menu.Item>
+        <Link to="/">
+          <Menu.Item name="header">
+            <Header
+              as="hs"
+              content="LFG"
+              subheader="A better way to party"
+              inverted
+            />
+          </Menu.Item>
+        </Link>
         <br />
         {this.props.isLoggedIn ? (
           <Menu.Item

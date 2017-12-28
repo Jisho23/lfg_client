@@ -16,19 +16,33 @@ export const createGamerCards = (users, currentUser, gamers, onToggle) => {
     if (user.lfg && user.id !== currentUser) {
       return (
         <Card raised key={user.id}>
-          <Card.Content>
-            <Image bordered floated="right" size="tiny" src={user.image} />
-            <Card.Header>{user.username}</Card.Header>
-          </Card.Content>
           {gamers.includes(user.id) ? (
-            <Button color="violet" onClick={onToggle} value={user.id}>
+            <Button
+              color="violet"
+              onClick={onToggle}
+              value={user.id}
+              attached="top"
+            >
               Remove from party
             </Button>
           ) : (
-            <Button color="blue" onClick={onToggle} value={user.id}>
+            <Button
+              color="blue"
+              onClick={onToggle}
+              attached="top"
+              value={user.id}
+            >
               Add to party
             </Button>
           )}
+          <Card.Content>
+            <Image bordered floated="right" size="mini" src={user.image} />
+            <Card.Header>{user.username}</Card.Header>
+            <Card.Meta>{user.status}</Card.Meta>
+            <p>
+              <Icon color="violet" name="star" />: {user.honor}
+            </p>
+          </Card.Content>
         </Card>
       );
     }
@@ -110,8 +124,14 @@ export const createPartyMember = (
           Honor Player
         </Button>
       ) : null}
-      <Image bordered src={member.recipient.image} />
+
       <Card.Content>
+        <Image
+          floated="right"
+          size="mini"
+          bordered
+          src={member.recipient.image}
+        />
         <Card.Header floated="center">{member.recipient.username}</Card.Header>
         <Card.Meta> - "{member.recipient.status}"</Card.Meta>
       </Card.Content>
@@ -253,7 +273,7 @@ export const createCard = (group, owned, handleGroupSelect) => {
 export const createInvite = (invite, handleInvite) => {
   return (
     <Feed.Event key={invite.id}>
-      <Feed.Label bordered image={invite.game.image} />
+      <Feed.Label image={invite.game.image} />
       <Feed.Content>
         <Feed.Summary>
           {invite.sender.username} invited you to play {invite.game.name}!

@@ -6,7 +6,8 @@ import {
   Image,
   Button,
   Segment,
-  Checkbox
+  Checkbox,
+  Grid
 } from "semantic-ui-react";
 
 class CreateUser extends Component {
@@ -17,7 +18,7 @@ class CreateUser extends Component {
         username: "",
         password: "",
         passwordConfirm: "",
-        image: ""
+        image: "http://ak3.picdn.net/shutterstock/videos/267883/thumb/10.jpg"
       },
       terms: false,
       error: ""
@@ -34,6 +35,11 @@ class CreateUser extends Component {
     this.setState({ error: "" });
     if (!this.state.terms) {
       this.setState({ error: "Please accepts the terms and conditions!" });
+    } else if (
+      this.state.fields.password === "" ||
+      this.state.fields.username === ""
+    ) {
+      this.setState({ error: "No blank forms please!" });
     } else if (
       this.state.fields.password !== this.state.fields.passwordConfirm &&
       this.state.fields.password !== ""
@@ -53,49 +59,61 @@ class CreateUser extends Component {
     return (
       <Container>
         <Segment inverted>
-          <Form inverted onSubmit={this.handleSubmit}>
-            <Form.Group widths="equal">
-              <Form.Input
-                label="Username"
-                placeholder="username"
-                name="username"
-                value={this.state.username}
-                onChange={this.handleChange}
-              />
-              <Form.Input
-                label="Password"
-                placeholder="password"
-                type="password"
-                name="password"
-                value={this.state.password}
-                onChange={this.handleChange}
-              />
-              <Form.Input
-                label="Confirm Password"
-                placeholder="password"
-                type="password"
-                name="passwordConfirm"
-                value={this.state.passwordConfirm}
-                onChange={this.handleChange}
-              />
-            </Form.Group>
-            <Form.Input
-              label="ImageUrl"
-              placeholder="put an image url here"
-              name="image"
-              value={this.state.image}
-              onChange={this.handleChange}
-            />
-            <Form.Field
-              control={Checkbox}
-              label="I agree to the Terms and Conditions"
-              onChange={this.handleToggle}
-            />
-            <Container>
-              <Image src={this.state.fields.image} size="small" />
-            </Container>
-            <Button type="submit">Login</Button>
-          </Form>
+          <Grid columns={2}>
+            <Grid.Column>
+              <Form inverted onSubmit={this.handleSubmit}>
+                <Form.Group widths="equal">
+                  <Form.Input
+                    label="Username"
+                    placeholder="username"
+                    name="username"
+                    value={this.state.username}
+                    onChange={this.handleChange}
+                  />
+                  <Form.Input
+                    label="Password"
+                    placeholder="password"
+                    type="password"
+                    name="password"
+                    value={this.state.password}
+                    onChange={this.handleChange}
+                  />
+                  <Form.Input
+                    label="Confirm Password"
+                    placeholder="password"
+                    type="password"
+                    name="passwordConfirm"
+                    value={this.state.passwordConfirm}
+                    onChange={this.handleChange}
+                  />
+                </Form.Group>
+                <Form.Input
+                  label="ImageUrl"
+                  placeholder="put an image url here"
+                  name="image"
+                  value={this.state.image}
+                  onChange={this.handleChange}
+                />
+                <Form.Field
+                  control={Checkbox}
+                  label="I agree to the Terms and Conditions"
+                  onChange={this.handleToggle}
+                />
+
+                <Button type="submit">Login</Button>
+              </Form>
+            </Grid.Column>
+            <Grid.Column>
+              {" "}
+              <Container>
+                <Image
+                  floated="right"
+                  src={this.state.fields.image}
+                  size="medium"
+                />
+              </Container>{" "}
+            </Grid.Column>
+          </Grid>
         </Segment>
         {this.state.error ? (
           <Message negative>{this.state.error}</Message>

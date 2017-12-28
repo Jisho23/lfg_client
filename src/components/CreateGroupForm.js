@@ -56,7 +56,7 @@ class CreateGroupForm extends Component {
           </Card.Group>
         </Container>
         <div className="ui center aligned segment">
-          <Button color="blue" onClick={this.handleSubmit}>
+          <Button color="violet" onClick={this.handleSubmit}>
             Create Party
           </Button>
         </div>

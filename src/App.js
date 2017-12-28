@@ -8,6 +8,9 @@ import Login from "./components/Login.js";
 import Myprofile from "./components/Myprofile.js";
 import CreateGroup from "./components/Creategroup.js";
 import Groupview from "./components/Groupview.js";
+import Homepage from "./components/home.js";
+import Footer from "./components/footer.js";
+
 import * as Api from "./Api/Index.js";
 
 import {} from "semantic-ui-react";
@@ -24,6 +27,7 @@ class App extends Component {
       success: "",
       user: {},
       group: {},
+      otherUsers: {},
       nav: ""
     };
   }
@@ -116,7 +120,37 @@ class App extends Component {
     Api.handleFindGroup(groupId)
       .then(res => res.json())
       .then(json => this.setState({ group: json }))
-      .then(() => this.props.history.push("/group"));
+      .then(() => {
+        this.handleOtherUsers();
+        this.props.history.push("/group");
+      });
+  };
+
+  handleOtherUsers = () => {
+    Api.fetchGameInfo(this.state.group.game.id)
+      .then(res => res.json())
+      .then(json => this.filterPlayers(json.users));
+  };
+
+  filterPlayers = users => {
+    let otherUsers = users;
+    this.state.group.members.forEach(member => {
+      otherUsers = otherUsers.filter(
+        otherUser => otherUser.id !== member.recipient.id
+      );
+    });
+    this.state.group.pending.forEach(member => {
+      otherUsers = otherUsers.filter(
+        otherUser => otherUser.id !== member.recipient.id
+      );
+    });
+    otherUsers = otherUsers.filter(user => user.id !== this.state.user.user.id);
+    this.setState({
+      otherUsers: otherUsers.map(user => {
+        const newObj = { text: user.username, value: user.id, key: user.id };
+        return newObj;
+      })
+    });
   };
 
   handleAcceptRejectInvite = (action, invite_id) => {
@@ -124,13 +158,15 @@ class App extends Component {
     Api.handleAcceptRejectInvite(body)
       .then(res => res.json())
       .then(json => {
-        debugger;
         if (action === "Leave Party?") {
           this.props.history.push("/myprofile");
-        } else if (json.invite_status === "Invite Accepted!") {
+        } else {
           this.handleFindGroup(json.group_id);
         }
         this.findCurrentUser();
+        if (this.state.group.id) {
+          this.handleFindGroup(this.state.group.id);
+        }
       });
   };
 
@@ -145,8 +181,14 @@ class App extends Component {
     Api.createUser(form)
       .then(res => res.json())
       .then(json => {
-        this.props.history.push("/login");
-        this.setState({ success: "You have successfully created a new user!" });
+        if (json.error) {
+          alert(json.error);
+        } else {
+          this.props.history.push("/login");
+          this.setState({
+            success: "You have successfully created a new user!"
+          });
+        }
       });
   };
 
@@ -154,14 +196,14 @@ class App extends Component {
     Api.handleHonor(honorInfo)
       .then(res => res.json())
       .then(json => {
-        console.log(json);
         this.findCurrentUser();
       });
   };
 
   addToParty = form => {
-    debugger;
-    Api.addNewPlayer(form).then(() => this.handleFindGroup(form.groupId));
+    Api.addNewPlayer(form).then(() => {
+      this.handleFindGroup(form.groupId);
+    });
   };
 
   render() {
@@ -178,7 +220,7 @@ class App extends Component {
         {!!this.state.success ? (
           <div className="ui success message"> {this.state.success} </div>
         ) : null}
-        <Route exact path="/" render={() => <div>Test</div>} />
+        <Route exact path="/" render={() => <Homepage />} />
         <Route
           path="/games"
           render={() => (
@@ -241,9 +283,11 @@ class App extends Component {
               setNav={this.setNav}
               handleHonor={this.handleHonor}
               addToParty={this.addToParty}
+              options={this.state.otherUsers}
             />
           )}
         />
+        <Footer />
       </div>
     );
   }

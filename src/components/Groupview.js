@@ -1,23 +1,17 @@
 import React, { Component } from "react";
 import * as Builders from "../Builders/Builders.js";
-import { Card, Segment, Divider, Form } from "semantic-ui-react";
+import { Card, Segment, Divider, Form, Message } from "semantic-ui-react";
 import Chats from "./Chats.js";
 import { withRouter } from "react-router-dom";
-import * as Api from "../Api/Index.js";
 
 class Groupview extends Component {
   constructor() {
     super();
-    this.state = { otherUsers: [], userToAdd: "" };
+    this.state = { message: {}, userToAdd: "" };
   }
 
   componentDidMount() {
     this.props.setNav("");
-    if (this.props.group.game) {
-      Api.fetchGameInfo(this.props.group.game.id)
-        .then(res => res.json())
-        .then(json => this.filterPlayers(json.users));
-    }
   }
 
   handleInvite = (e, index) => {
@@ -33,28 +27,6 @@ class Groupview extends Component {
     this.props.handleHonor(index.value);
   };
 
-  filterPlayers = users => {
-    let otherUsers = users;
-    this.props.group.members.forEach(member => {
-      otherUsers = otherUsers.filter(
-        otherUser => otherUser.id !== member.recipient.id
-      );
-    });
-    this.props.group.pending.forEach(member => {
-      otherUsers = otherUsers.filter(
-        otherUser => otherUser.id !== member.recipient.id
-      );
-    });
-    otherUsers = otherUsers.filter(user => user.id !== this.props.user.user.id);
-    this.setState({
-      otherUsers: otherUsers.map(user => {
-        const newObj = { text: user.username, value: user.id, key: user.id };
-        return newObj;
-      })
-    });
-    console.log(this.state);
-  };
-
   handleChange = e => {
     this.setState({ userToAdd: e.target.innerText });
   };
@@ -67,6 +39,12 @@ class Groupview extends Component {
       senderId: this.props.user.user.id
     };
     this.props.addToParty(form);
+    this.setState({
+      message: {
+        success: true,
+        content: `Invite to ${this.state.userToAdd} sent!`
+      }
+    });
   };
 
   render() {
@@ -74,73 +52,73 @@ class Groupview extends Component {
       this.props.history.push("/myprofile");
       return null;
     }
+
     return (
-      <Segment.Group>
-        <Segment.Group horizontal>
-          <Segment.Group>
-            <Segment>
-              <Divider horizontal>Party Info</Divider>
-              {Builders.partyInfoCard(
-                this.props.group,
-                this.props.user,
-                this.handleDisban,
-                this.handleHonor
+      <Segment.Group horizontal>
+        <Segment.Group>
+          <Segment>
+            <Divider horizontal>Party Info</Divider>
+            {Builders.partyInfoCard(
+              this.props.group,
+              this.props.user,
+              this.handleDisban,
+              this.handleHonor
+            )}
+          </Segment>
+          <Segment>
+            <Divider horizontal>Party Members</Divider>
+            <Card.Group itemsPerRow={3}>
+              {this.props.group.members.map(member =>
+                Builders.createPartyMember(
+                  member,
+                  this.props.user,
+                  this.props.group,
+                  this.handleInvite,
+                  this.handleHonor
+                )
               )}
-            </Segment>
+            </Card.Group>
+          </Segment>
+          {this.props.user.user.id === this.props.group.owner.id ? (
             <Segment>
-              <Divider horizontal>Party Members</Divider>
-              <Card.Group>
-                {this.props.group.members.map(member =>
-                  Builders.createPartyMember(
-                    member,
-                    this.props.user,
-                    this.props.group,
-                    this.handleInvite,
-                    this.handleHonor
-                  )
-                )}
-              </Card.Group>
+              <Form size="tiny" onSubmit={this.handleSubmit}>
+                {" "}
+                <Form.Group>
+                  <Form.Select
+                    placeholder="Add more players?"
+                    options={this.props.options}
+                    onChange={this.handleChange}
+                  />
+                  <Form.Button size="tiny" color="blue">
+                    Add Player to Party
+                  </Form.Button>
+                </Form.Group>
+              </Form>
             </Segment>
-            {this.props.user.user.id === this.props.group.owner.id ? (
-              <Segment>
-                {this.state.otherUsers ? (
-                  <Form size="tiny" onSubmit={this.handleSubmit}>
-                    {" "}
-                    <Form.Group>
-                      <Form.Select
-                        placeholder="Add more players?"
-                        options={this.state.otherUsers}
-                        onChange={this.handleChange}
-                      />
-                      <Form.Button size="tiny" color="blue">
-                        Add Player to Party
-                      </Form.Button>
-                    </Form.Group>
-                  </Form>
-                ) : null}
-              </Segment>
+          ) : null}
+          <Segment>
+            {this.state.message.success ? (
+              <Message success content={this.state.message.content} />
             ) : null}
-            <Segment>
-              <Divider horizontal>Pending Invites</Divider>
-              <Card.Group>
-                {this.props.group.pending.map(member =>
-                  Builders.createPartyMember(
-                    member,
-                    this.props.user,
-                    this.props.group,
-                    this.handleInvite,
-                    this.handleHonor
-                  )
-                )}
-              </Card.Group>
-            </Segment>
-          </Segment.Group>
-          <Segment.Group>
-            <Segment>
-              <Divider horizontal>LiveChat</Divider>
-              <Chats group={this.props.group} user={this.props.user.user} />
-            </Segment>
-          </Segment.Group>
+            <Divider horizontal>Pending Invites</Divider>
+            <Card.Group itemsPerRow={3}>
+              {this.props.group.pending.map(member =>
+                Builders.createPartyMember(
+                  member,
+                  this.props.user,
+                  this.props.group,
+                  this.handleInvite,
+                  this.handleHonor
+                )
+              )}
+            </Card.Group>
+          </Segment>
+        </Segment.Group>
+        <Segment.Group>
+          <Segment>
+            <Divider horizontal>LiveChat</Divider>
+            <Chats group={this.props.group} user={this.props.user.user} />
+          </Segment>
         </Segment.Group>
       </Segment.Group>
     );
