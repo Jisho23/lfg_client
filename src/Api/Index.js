@@ -1,4 +1,6 @@
-const URL = "http://localhost:3001/api/v1";
+// const URL = "http://localhost:3001/api/v1";
+// comment based
+const URL = "https://lfgapi.herokuapp.com/api/v1";
 
 export const fetchaddRemoveGame = toDo => {
   return fetch(URL + "/addRemoveGame", {

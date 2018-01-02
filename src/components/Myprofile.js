@@ -62,7 +62,7 @@ class Myprofile extends Component {
           <Grid.Row>
             <Grid.Column width={4}>
               <Card centered>
-                <Image src={this.props.user.user.image} />
+                <Image circular src={this.props.user.user.image} />
                 <Card.Content>
                   <Card.Header>
                     Username: {this.props.user.user.username}

@@ -36,7 +36,13 @@ export const createGamerCards = (users, currentUser, gamers, onToggle) => {
             </Button>
           )}
           <Card.Content>
-            <Image bordered floated="right" size="mini" src={user.image} />
+            <Image
+              circular
+              bordered
+              floated="right"
+              size="mini"
+              src={user.image}
+            />
             <Card.Header>{user.username}</Card.Header>
             <Card.Meta>{user.status}</Card.Meta>
             <p>
@@ -129,8 +135,9 @@ export const createPartyMember = (
 
       <Card.Content>
         <Image
+          circular
           floated="right"
-          size="mini"
+          size="tiny"
           bordered
           src={member.recipient.image}
         />
@@ -192,7 +199,13 @@ export const partyInfoCard = (group, user, handleDisban, handleHonor) => {
         ) : null}
         <Card.Content>
           <Divider horizontal>Owner</Divider>
-          <Image floated="right" size="tiny" bordered src={group.owner.image} />
+          <Image
+            circular
+            floated="right"
+            size="tiny"
+            bordered
+            src={group.owner.image}
+          />
           <Card.Header>{group.owner.username}</Card.Header>
           <Card.Meta> - "{group.owner.status}"</Card.Meta>
         </Card.Content>
