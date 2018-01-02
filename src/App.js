@@ -105,15 +105,17 @@ class App extends Component {
   handleLogout = () => {
     localStorage.removeItem("jwt");
     this.setState({ authorization: { isLoggedIn: false } });
-    this.props.history.push(`/login`);
+    this.setState({ user: {} });
+    this.props.history.push(`/`);
   };
 
   handleCreateGroup = form => {
     Api.handleCreateGroup(form)
       .then(res => res.json())
-      .then(json => this.setState({ group: json }))
-      .then(() => this.findCurrentUser())
-      .then(() => this.props.history.push("/group"));
+      .then(json => {
+        this.findCurrentUser();
+        this.handleFindGroup(json.id);
+      });
   };
 
   handleFindGroup = groupId => {
@@ -164,9 +166,6 @@ class App extends Component {
           this.handleFindGroup(json.group_id);
         }
         this.findCurrentUser();
-        if (this.state.group.id) {
-          this.handleFindGroup(this.state.group.id);
-        }
       });
   };
 

@@ -27,7 +27,7 @@ export const createGamerCards = (users, currentUser, gamers, onToggle) => {
             </Button>
           ) : (
             <Button
-              color="blue"
+              color="yellow"
               onClick={onToggle}
               attached="top"
               value={user.id}
@@ -45,6 +45,8 @@ export const createGamerCards = (users, currentUser, gamers, onToggle) => {
           </Card.Content>
         </Card>
       );
+    } else {
+      return null;
     }
   });
 };
@@ -279,7 +281,11 @@ export const createInvite = (invite, handleInvite) => {
           {invite.sender.username} invited you to play {invite.game.name}!
         </Feed.Summary>
         <Feed.Extra images>
-          <Button color="blue" value={invite.invite_id} onClick={handleInvite}>
+          <Button
+            color="yellow"
+            value={invite.invite_id}
+            onClick={handleInvite}
+          >
             Accept
           </Button>
           <Button

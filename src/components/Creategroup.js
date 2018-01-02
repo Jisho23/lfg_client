@@ -47,21 +47,24 @@ class CreateGroup extends Component {
   render() {
     return (
       <div>
-        <Container fluid>
+        <Container>
           <Menu inverted size="large">
             <Menu.Item>
               <Form inverted onSubmit={this.handleGameSearch}>
-                <Form.Select
-                  width={8}
-                  label="Search a game"
-                  options={this.state.options}
-                  placeholder="Time to choose..."
-                  onChange={this.handleGameChange}
-                  name="gameSearch"
-                />
-                <Form.Button color="violet" circular type="submit">
-                  LFP...
-                </Form.Button>
+                <Form.Group>
+                  <Form.Select
+                    options={this.state.options}
+                    placeholder="Choose a game to search..."
+                    onChange={this.handleGameChange}
+                    name="gameSearch"
+                  />
+                  <Form.Button
+                    color="violet"
+                    circular
+                    type="submit"
+                    content="LFP..."
+                  />
+                </Form.Group>
               </Form>
             </Menu.Item>
           </Menu>

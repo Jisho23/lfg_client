@@ -88,7 +88,7 @@ class Myprofile extends Component {
                     <Button
                       circular
                       fluid
-                      color="blue"
+                      color="yellow"
                       onClick={this.handleLfg}
                     >
                       LFG
@@ -133,15 +133,15 @@ class Myprofile extends Component {
                     </Header>
                     <Divider />
                     <Grid columns="three">
-                      <Grid.Column />
-                      <Grid.Column>
+                      <Grid.Column width={4} />
+                      <Grid.Column width={7}>
                         <Feed>
                           {this.props.user.invites.map(invite =>
                             Builders.createInvite(invite, this.handleInvite)
                           )}
                         </Feed>
                       </Grid.Column>
-                      <Grid.Column />
+                      <Grid.Column width={3} />
                     </Grid>
                   </Container>
                 ) : null}

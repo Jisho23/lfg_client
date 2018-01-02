@@ -100,7 +100,9 @@ class CreateUser extends Component {
                   onChange={this.handleToggle}
                 />
 
-                <Button type="submit">Login</Button>
+                <Button color="violet" type="submit">
+                  Create User
+                </Button>
               </Form>
             </Grid.Column>
             <Grid.Column>
