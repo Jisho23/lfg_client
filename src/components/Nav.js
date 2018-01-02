@@ -59,7 +59,7 @@ class Navbar extends Component {
             onClick={this.handleItemClick}
             active={this.props.nav === "games"}
           >
-            Browse games
+            BrowseGames
           </Menu.Item>
         ) : null}
 

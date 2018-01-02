@@ -18,7 +18,7 @@ export const createGamerCards = (users, currentUser, gamers, onToggle) => {
         <Card raised key={user.id}>
           {gamers.includes(user.id) ? (
             <Button
-              color="violet"
+              color="yellow"
               onClick={onToggle}
               value={user.id}
               attached="top"
@@ -27,7 +27,7 @@ export const createGamerCards = (users, currentUser, gamers, onToggle) => {
             </Button>
           ) : (
             <Button
-              color="yellow"
+              color="violet"
               onClick={onToggle}
               attached="top"
               value={user.id}
