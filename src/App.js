@@ -177,6 +177,7 @@ class App extends Component {
   };
 
   createUser = form => {
+    this.handleLogout();
     Api.createUser(form)
       .then(res => res.json())
       .then(json => {

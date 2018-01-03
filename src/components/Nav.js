@@ -15,15 +15,10 @@ class Navbar extends Component {
 
   render() {
     return (
-      <Menu inverted color={"black"}>
+      <Menu className="otherFont" inverted color={"black"}>
         <Link to="/">
           <Menu.Item name="header">
-            <Header
-              as="hs"
-              content="LFG"
-              subheader="A better way to party"
-              inverted
-            />
+            <Header content="LFG" subheader="A better way to party" inverted />
           </Menu.Item>
         </Link>
         <br />

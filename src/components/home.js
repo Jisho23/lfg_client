@@ -7,7 +7,7 @@ export default class Homepage extends Component {
 
   render() {
     return (
-      <div>
+      <div className="landing-image">
         <Segment
           textAlign="center"
           style={{ minHeight: 350, padding: "1em 0em" }}
@@ -15,6 +15,7 @@ export default class Homepage extends Component {
         >
           <Container text>
             <Header
+              inverted
               as="h1"
               content="LFG"
               style={{
@@ -25,6 +26,7 @@ export default class Homepage extends Component {
               }}
             />
             <Header
+              inverted
               as="h2"
               content="Looking for Group"
               style={{ fontSize: "1.7em", fontWeight: "normal" }}

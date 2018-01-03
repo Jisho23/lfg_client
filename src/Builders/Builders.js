@@ -240,9 +240,11 @@ export const createCardGroup = (owner, owned, handleGroupSelect) => {
   return owner.map(group => createCard(group, owned, handleGroupSelect));
 };
 
+let groupCardId = 0;
 export const createCard = (group, owned, handleGroupSelect) => {
+  groupCardId += 1;
   return (
-    <Card centered key={group.id} raised>
+    <Card centered key={`a` + groupCardId} raised>
       <Card.Content>
         {!owned ? (
           <Item>
@@ -285,9 +287,11 @@ export const createCard = (group, owned, handleGroupSelect) => {
   );
 };
 
+let inviteId = 0;
 export const createInvite = (invite, handleInvite) => {
+  inviteId += 1;
   return (
-    <Feed.Event key={invite.id}>
+    <Feed.Event key={inviteId}>
       <Feed.Label image={invite.game.image} />
       <Feed.Content>
         <Feed.Summary>
