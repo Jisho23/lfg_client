@@ -208,7 +208,12 @@ class App extends Component {
 
   render() {
     return (
-      <div>
+      <div
+        style={{
+          backgroundImage:
+            "url('https://i.pinimg.com/originals/74/86/0d/74860d725facc1a763261b4fd10c3a12.jpg')"
+        }}
+      >
         <Navbar
           handleLogout={this.handleLogout}
           isLoggedIn={this.state.authorization.isLoggedIn}

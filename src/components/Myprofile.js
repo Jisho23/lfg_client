@@ -18,7 +18,7 @@ import {
 class Myprofile extends Component {
   constructor() {
     super();
-    this.state = { view: "Feed", status: "" };
+    this.state = { view: "Feed", status: "", image: "" };
     this.handleLfg = this.handleLfg.bind(this);
   }
 
@@ -34,6 +34,12 @@ class Myprofile extends Component {
     e.preventDefault();
     this.props.updateUser("status", this.state.status);
     this.setState({ status: "" });
+  };
+
+  updateImage = e => {
+    e.preventDefault();
+    this.props.updateUser("image", this.state.image);
+    this.setState({ image: "" });
   };
 
   handleGroupSelect = (e, index) => {
@@ -64,6 +70,20 @@ class Myprofile extends Component {
               <Card centered>
                 <Image circular src={this.props.user.user.image} />
                 <Card.Content>
+                  <Segment>
+                    <Form size="mini" onSubmit={this.updateImage}>
+                      <Form.Input
+                        size="mini"
+                        name="image"
+                        placeholder="Put a URL here"
+                        value={this.state.image}
+                        onChange={this.handleChange}
+                      />
+                      <Form.Button size="mini" fluid color="violet">
+                        UpdateImage
+                      </Form.Button>
+                    </Form>
+                  </Segment>
                   <Card.Header>
                     Username: {this.props.user.user.username}
                   </Card.Header>
